@@ -1,0 +1,10 @@
+{
+  "name": "jw-wdio-mailer",
+  "version": "1.0.0",
+  "description": "This is a service for webdriverIO mailing results",
+  "main": "index.js",
+  "author": "c-fmichel@jwplayer.com",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
