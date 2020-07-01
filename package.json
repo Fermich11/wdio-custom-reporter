@@ -1,9 +1,9 @@
 {
-  "name": "jw-wdio-mailer",
+  "name": "wdio-mailer",
   "version": "1.0.0",
   "description": "This is a service for webdriverIO mailing results",
   "main": "index.mjs",
-  "author": "c-fmichel@jwplayer.com",
+  "author": "fermich11@hotmail.com",
   "license": "MIT",
   "dependencies": {
     "@wdio/reporter": "^6.1.14",
