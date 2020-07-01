@@ -2,9 +2,13 @@
   "name": "jw-wdio-mailer",
   "version": "1.0.0",
   "description": "This is a service for webdriverIO mailing results",
-  "main": "index.js",
+  "main": "index.mjs",
   "author": "c-fmichel@jwplayer.com",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@wdio/reporter": "^6.1.14",
+    "nodemailer": "^6.4.10",
+    "xoauth2": "^1.2.0"
+  },
   "devDependencies": {}
 }

@@ -1,26 +1,29 @@
 /**
  * @class This object will construct a json to handler all the related info about the wdio run.
- * @param {string} id This is the identifier that would be used for the wdio run. 
  */
-class DataHandler {
-    constructor(id) {
-        this.id = id;
-        this.data = { [id]: {} };
+export class DataHandler {
+    constructor() {
+        this.features = {};
+        this.currentFeature = [];
     };
-
 
     /**
      * @returns {object} Returns the actual status of the wdio run
      */
-    get data () { return this.data; }
+    getFeatures() { return this.features; }
 
     /**
-     * @param {string} status This would be the status of the scenario, if pass or fail.
-     * @param {string} scenario The name of the scenario that is actually running.
-     * @param {string} feature The name of the feature file that is actually running.
+     * @param {string} scenarioName it will add the scenario name
+     * @param {string} status will add the status of the scenario
      */
-    insertResult(status, scenario, feature) {
-        this.data[this.id][feature][scenario] = { status }; 
+    addScenarioStatus(scenarioName, status) {
+        this.currentFeature.push({ name: scenarioName.replace(/\\\//g, ''), status });
     }
+
+    closeFeature(name) {
+        this.features = Object.assign(this.features, { [name]: this.currentFeature });
+        this.currentFeature = {};
+    }
+
 
 }
