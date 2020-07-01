@@ -24,11 +24,12 @@ export class Mailer {
             to: 'c-fmichel@jwplayer.com', // list of receivers
             subject: 'You\'re reports', // Subject line
             text: 'Hello, you should check your reports', // plain text body
-            html: '<b>Hello world?</b>', // html body
+            html: 'Here goes your features', // html body
         };
     }
 
-    sendMail() {
+    sendMail(features) {
+        this.mailOptions.html = JSON.stringify(features);
         return this.transporter.sendMail(this.mailOptions).catch(e => e);
     }
 }

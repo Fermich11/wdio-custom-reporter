@@ -37,7 +37,7 @@ export default class ReportMailer extends WDIOReporter {
     async onRunnerEnd() {
         this.isWaiting = true;
         try{
-            const response = await this.mailer.sendMail();
+            const response = await this.mailer.sendMail(this.dataHandler.getFeatures());
             console.log('-------> ', JSON.stringify(response))
         } catch(err) {
             this.write(`Sorry, an error was throw: ${err}`)
