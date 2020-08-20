@@ -1,6 +1,6 @@
 import WDIOReporter from '@wdio/reporter';
-import { DataHandler } from './src/dataHandler';
 import { Mailer } from './src/mailer.js';
+import { getFeatures, addScenarioStatus, closeFeature } from './src/dataHandler';
 
 export default class ReportMailer extends WDIOReporter {
     constructor(options) {
@@ -10,7 +10,6 @@ export default class ReportMailer extends WDIOReporter {
         options = Object.assign(options, { stdout: true});
         super(options);
 
-        this.dataHandler = new DataHandler();
         this.mailer = new Mailer(options['mail']);
         this.isWaiting = false;
     }
@@ -23,26 +22,29 @@ export default class ReportMailer extends WDIOReporter {
         if(suite.type === 'scenario') {
             const state = suite.tests.map(el => el.state);
             if (state.includes('failed')) {
-                this.dataHandler.addScenarioStatus(suite.title, 'fail');
+                addScenarioStatus(suite.title, 'fail');
             } else if(state.includes('skipped')) {
-                this.dataHandler.addScenarioStatus(suite.title, 'skip');
+                addScenarioStatus(suite.title, 'skip');
             } else {
-                this.dataHandler.addScenarioStatus(suite.title, 'pass');
+                addScenarioStatus(suite.title, 'pass');
             }
         } else if(suite.type === 'feature') {
-            this.dataHandler.closeFeature(suite.title);
+            closeFeature(suite.title);
         }
     }
 
-    async onRunnerEnd() {
-        this.isWaiting = true;
-        try{
-            const response = await this.mailer.sendMail(this.dataHandler.getFeatures());
-            console.log('-------> ', JSON.stringify(response))
-        } catch(err) {
-            this.write(`Sorry, an error was throw: ${err}`)
+    async onRunnerEnd(runner) {
+        const lastSpec = runner.config.specs[runner.config.specs.length - 1];
+        const currentSpec = runner.specs[0];
+        if(lastSpec.slice(1, lastSpec.length) === currentSpec) {
+            this.isWaiting = true;
+            try{
+                await this.mailer.sendMail(getFeatures());
+            } catch(err) {
+                this.write(`Sorry, an error was throw: ${err}`)
+            }
+            this.write(JSON.stringify(getFeatures()));
+            this.isWaiting = false;
         }
-        this.write(JSON.stringify(this.dataHandler.getFeatures()));
-        this.isWaiting = false;
     }
 };

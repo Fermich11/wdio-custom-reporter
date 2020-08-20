@@ -1,29 +1,17 @@
+var features = {};
+var currentFeature = [];
+
+export function getFeatures() { return features; };
+
 /**
- * @class This object will construct a json to handler all the related info about the wdio run.
+ * @param {string} scenarioName it will add the scenario name
+ * @param {string} status will add the status of the scenario
  */
-export class DataHandler {
-    constructor() {
-        this.features = {};
-        this.currentFeature = [];
-    };
+export function addScenarioStatus(scenarioName, status) {
+    currentFeature.push({ name: scenarioName.replace(/\\\//g, ''), status });
+};
 
-    /**
-     * @returns {object} Returns the actual status of the wdio run
-     */
-    getFeatures() { return this.features; }
-
-    /**
-     * @param {string} scenarioName it will add the scenario name
-     * @param {string} status will add the status of the scenario
-     */
-    addScenarioStatus(scenarioName, status) {
-        this.currentFeature.push({ name: scenarioName.replace(/\\\//g, ''), status });
-    }
-
-    closeFeature(name) {
-        this.features = Object.assign(this.features, { [name]: this.currentFeature });
-        this.currentFeature = {};
-    }
-
-
-}
+export function closeFeature(name) {
+     Object.assign(features, { [name]: currentFeature });
+    currentFeature = [];
+};
